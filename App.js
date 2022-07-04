@@ -41,6 +41,8 @@ export default function App() {
   }
 
   return (
+    <>
+    <StatusBar style='light'></StatusBar>
     <LinearGradient colors={[Colors.primary700, Colors.secondary500]} style={styles.rootScreen}>
       <ImageBackground source={require('./assets/images/background.png')} resizeMode="cover" style={styles.rootScreen} imageStyle={styles.backgroundImage} >
         {
@@ -63,6 +65,7 @@ export default function App() {
 
       </ImageBackground>
     </LinearGradient>
+    </>
   );
 }
 

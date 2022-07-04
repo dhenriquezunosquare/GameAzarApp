@@ -1,6 +1,6 @@
 import { enableExpoCliLogging } from 'expo/build/logs/Logs';
 import React, { useEffect, useState } from 'react'
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native'
+import { Alert, FlatList, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { PrimaryButton } from '../components/Buttons/PrimaryButton';
 import { Card } from '../components/Cards/Card';
 import { Label } from '../components/Texts/Label';
@@ -28,6 +28,8 @@ export const GameScreen = ({ userNumber, GameOver }) => {
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
 
   const [guessRounds, setGessRounds] = useState([initialGuess]);
+
+  const { width, height } = useWindowDimensions();
 
 
   const nextGuessHandler = (direction) => { //lower / higher
@@ -66,30 +68,56 @@ export const GameScreen = ({ userNumber, GameOver }) => {
   }, [currentGuess, userNumber, GameOver]);
 
 
-  return (
-    <View style={styles.container}>
-      <Title title="Opponent's Guess" />
-      <NumberContainer message={currentGuess} />
-      <Card>
-        <Label message="higher or lower" style={styles.label} />
-        <View style={styles.buttonContainer}>
+  let content = <>
+    <NumberContainer message={currentGuess} />
+    <Card>
+      <Label message="higher or lower" style={styles.label} />
+      <View style={styles.buttonContainer}>
+        <View style={styles.button}>
+          <PrimaryButton onPress={() => nextGuessHandler('higher')}>
+            <Ionicons name="md-add" size={24} color="white" />
+          </PrimaryButton>
+        </View>
+        <View style={styles.button}>
+          <PrimaryButton onPress={() => nextGuessHandler('lower')}>
+            <Ionicons name="md-remove" size={24} color="white" />
+          </PrimaryButton>
+        </View>
+      </View>
+    </Card>
+  </>
+
+  if (width > 500) {
+    content = (
+      <>
+        <View style={styles.buttonContainerWidth}>
           <View style={styles.button}>
             <PrimaryButton onPress={() => nextGuessHandler('higher')}>
               <Ionicons name="md-add" size={24} color="white" />
             </PrimaryButton>
           </View>
+          <NumberContainer message={currentGuess} />
           <View style={styles.button}>
             <PrimaryButton onPress={() => nextGuessHandler('lower')}>
               <Ionicons name="md-remove" size={24} color="white" />
             </PrimaryButton>
           </View>
         </View>
-      </Card>
+
+      </>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Title title="Opponent's Guess" />
+
+      {content}
 
       <View style={styles.listContainer}>
-       <FlatList alwaysBounceVertical={false} data={guessRounds} renderItem={
-        (itemData)=> <GuessItem key={itemData.index} roundNumber={guessRoundsLength-itemData.index} guess={itemData.item} />
-       } />
+        <FlatList alwaysBounceVertical={false} data={guessRounds} renderItem={
+          (itemData) => <GuessItem key={itemData.index} roundNumber={guessRoundsLength - itemData.index} guess={itemData.item} />
+        } />
       </View>
     </View>
   )
@@ -101,7 +129,7 @@ const styles = StyleSheet.create({
     padding: 24,
     // alignContent: 'center',
     // justifyContent: 'center',
-    // alignItems: 'center',
+    alignItems: 'center',
   },
   label: {
     marginBottom: 12,
@@ -118,11 +146,15 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
   },
+  buttonContainerWidth: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   button: {
     flex: 1
   },
   listContainer: {
-    flex:1,
-    padding:8
+    flex: 1,
+    padding: 8
   }
 })

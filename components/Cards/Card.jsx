@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View,Dimensions } from 'react-native'
 import { Colors } from '../../utils/colors'
 
 export const Card = ({children}) => {
@@ -10,13 +10,16 @@ export const Card = ({children}) => {
   )
 }
 
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
     marginHorizontal: 24,
-    marginTop: 36,
+    marginTop: deviceWidth < 380 ?18 : 24,
     backgroundColor: Colors.primary800,
     borderRadius: 6,
     elevation: 10, //Android only
